@@ -20,3 +20,10 @@ X.loc[(X.oldbalanceOrig == 0) & (X.newbalanceOrig == 0) & (X.amount != 0), ['old
 
 X['errorbalanceOrig'] = X.newbalanceOrig + X.amount - X.oldbalanceOrig
 X['errorbalanceDest'] = X.oldbalanceDest + X.amount - X.newbalanceDest
+
+from sklearn.cross_validation import train_test_split
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+import xgboost as xg
+weights = (y == 0).sum() / (1.0 * (y == 1).sum())
+xgb = xg.XGBClassifier(max_depth = 3, scale_pos_weight = weights, n_jobs = 4)
