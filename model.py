@@ -27,3 +27,7 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size = 0.2, random_
 import xgboost as xg
 weights = (y == 0).sum() / (1.0 * (y == 1).sum())
 xgb = xg.XGBClassifier(max_depth = 3, scale_pos_weight = weights, n_jobs = 4)
+
+from sklearn.metrics import average_precision_score
+y_pred = xgb.fit(X_train, y_train).predict_proba(X_val)
+average_precision_score(y_val, y_pred[:, 1])
